@@ -13,10 +13,10 @@ Load the config.json config file in as a dictionary
 '''
 def load_config():
 	log.info("Loading config...")
-	config_file_name = "config.json"
-	config_file = open(config_file_name, 'r')
+	config_file = open('config.json', 'r')
 	config = json.load(config_file)
 	log.success("Config loaded successfully")
+        config_file.close()
 	return config
 
 '''
@@ -42,7 +42,7 @@ def install_requirements(config):
         process = Popen("apt-get install -y %s" % package, shell = True, stdout = stdout, stderr = stdout)
         process.wait()
         if process.returncode == 0:
-            process.success("Done!")
+            progress.success("Done!")
         else:
             process.failure("Failed to install: %s" % package)
             log.error("Please check the log for more information")
@@ -57,11 +57,12 @@ def install_git_repos(config):
         url = repo["url"]
         directory = repo["directory"]
         progress = log.progress("Cloning: %s into %s" % (url, directory))
-        process = Popen("git clone %s ./%s" % (url, directory), shell = True, stdout = stdout, stderr = stdout)
+        process = Popen("git clone %s %s" % (url, directory), shell = True, stdout = stdout, stderr = stdout)
         process.wait()
         if process.returncode == 0:
             progress.success("Complete.") 
         else:
+            print process.returncode
             progress.failure("Failed to clone %s into %s, please check the logs" % (url, directory))
     log.success("Git cloning complete")
 
