@@ -1,0 +1,17 @@
+{
+	"verbose" : false,
+	"git" : {
+		"install_dir": "/opt",
+		"repos" : [
+			{
+				"directory" : "repo1",
+				"url" : ""
+			},
+			{
+				"directory" : "repo2",
+				"url" : ""
+			}
+		]
+	}
+
+}
