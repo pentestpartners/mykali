@@ -24,6 +24,8 @@ Simple: Run the script
 
 - [ ] Have the script check the /etc/apt/sources.list is up to date (in case install from CD)
 - [x] Have the script update Kali 
-- [ ] Have the script clone a configurable list of git repos 
-- [ ] Have the script run any necessary install commands for those repos
+- [x] Have the script clone a configurable list of git repos 
+- [ ] Have the script install tools from the distro repos
+- [ ] Have the script run any necessary extra install commands for the git repos, such as pip/setup/extra linking
 - [ ] Have the script be able to run custom commands from the configuration file
+- [ ] Have the script be able to manage installing config files in some way (how?)
