@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
-import subprocess
 import json
+from subprocess import Popen
 from pwn import log
-import sys
-import os
+from sys import exit
+from os import chdir
 
 config = None
-DEVNULL = open(os.devnull, 'w')
+stdout = open("mykali.log", 'a')
 
 def load_config():
 	log.info("Loading config...")
@@ -19,41 +19,41 @@ def load_config():
 
 def update_kali(config):
 	progress = log.progress("Updating Kali")
-        if config["verbose"] == False:
-            stdout = DEVNULL
-        else:
-            stdout = None 
-        process = subprocess.Popen("apt update && apt full-upgrade -y", shell = True, stdout = stdout, stderr = stdout)
+        process = Popen("apt-get update && apt-get full-upgrade -y", shell = True, stdout = stdout, stderr = stdout)
         process.wait()
         if process.returncode == 0:
             progress.success("Done!")
         else:
             progress.failure("Failure...:")
-            log.error(process.read())
-            sys.exit(1)
+            log.error("Please check the log for more information")
+            exit(1)
 
 def install_requirements(config):
     progress = log.progress("Installing required packages...")
-    if config["verbose"] == False:
-        stdout = DEVNULL
-    else:
-        stdout = None
-    process = subprocess.Popen("apt install -y git", shell = True, stdout = stdout, stderr = stdout)
-    process.wait()
-    if process.returncode == 0:
-        process.success("Done!")
-    else:
-        process.failure("Failed to install git")
-        log.error(process.read())
-        sys.exit(1)
-        
+    for package in config["requirements"]:
+        process = Popen("apt-get install -y %s" % package, shell = True, stdout = stdout, stderr = stdout)
+        process.wait()
+        if process.returncode == 0:
+            process.success("Done!")
+        else:
+            process.failure("Failed to install: " + package)
+            log.error("Please check the log for more information")
+            exit(1)
 
 def install_git_repos(config):
-    os.chdir(config["git"]["install_dir"])
+    log.info("Cloning and configuring git repositories...")
+    chdir(config["git"]["install_dir"])
     for repo in config["git"]["repos"]:
-        log.info("Installing: " + repo["directory"])
-
-       
+        url = repo["url"]
+        directory = repo["directory"]
+        progress = log.progress("Cloning: %s into %s" % (url, directory))
+        process = Popen("git clone %s ./%s" % (url, directory), shell = True, stdout = stdout, stderr = stdout)
+        process.wait()
+        if process.returncode == 0:
+            progress.success("Complete.") 
+        else:
+            progress.failure("Failed to clone %s into %s, please check the logs" % (url, directory))
+    log.success("Git cloning complete")
 
 def main():
 	log.info("***** mykali Kali setup script by m0rv4i *****")

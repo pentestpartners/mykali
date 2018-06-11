@@ -1,15 +1,17 @@
 {
-	"verbose" : false,
+	"requirements" : [
+		"git"
+	],
 	"git" : {
 		"install_dir": "/opt",
 		"repos" : [
 			{
-				"directory" : "repo1",
-				"url" : ""
+				"directory" : "seclists",
+				"url" : "https://github.com/danielmiessler/SecLists.git"
 			},
 			{
-				"directory" : "repo2",
-				"url" : ""
+				"directory" : "ebowla",
+				"url" : "https://github.com/Genetic-Malware/Ebowla.git"
 			}
 		]
 	}
