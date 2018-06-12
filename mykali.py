@@ -115,9 +115,13 @@ def install_git_repos(config):
     if "repos" in config["git"] and len(config["git"]["repos"]) > 0:
         errored = False
         Logger.info("Cloning and configuring git repositories...")
-
+        install_dir = config["git"]["install_dir"]
+        if not path.isdir(install_dir):
+            Logger.failure("Git install directory does not exist: %s" % install_dir)
+            Logger.failure("Please check the configuration and try again.")
+            exit(1)
         for repo in config["git"]["repos"]:
-            chdir(config["git"]["install_dir"])
+            chdir(install_dir)
             url = repo["url"]
             directory = repo["directory"]
             Logger.info("Cloning: %s into %s" % (url, directory))
