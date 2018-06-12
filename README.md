@@ -42,14 +42,14 @@ To run the script and specify the directory holding the config files, use the `-
 
 ## Roadmap
 
-- [ ] Have the script check the /etc/apt/sources.list is up to date (in case install from CD)
+- [x] Have the script check the /etc/apt/sources.list is up to date (in case install from CD)
 - [x] Have the script update Kali 
 - [x] Have the script clone a configurable list of git repos 
 - [x] Have the script install tools from the distro repos
 - [x] Have the script run any necessary extra install commands for the git repos, such as pip/setup/extra linking
 - [x] Have the script take a directory parameter for backed up config directories
 - [ ] Have the script be able to run custom commands from the configuration file
-- [ ] Have the script be able to manage installing config files in some way
+- [ ] Have the script be able to manage installing config files (.zshrc, .bashrc etc)
 - [ ] Have the script handle environment variables for paths etc.
 - [ ] Create a secondary tool for looping through an existing /opt directory (or wherever) and adding the repos to the config.json
 

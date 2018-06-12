@@ -1,4 +1,8 @@
 {
+	"kali-sources" : {
+		"sources-file" : "/etc/apt/sources.list",
+		"repo" : "deb http://http.kali.org/kali kali-rolling main contrib non-free"
+	},
 	"requirements" : [
 		"git"
 	],

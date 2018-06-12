@@ -25,6 +25,28 @@ def load_config(directory):
 	return config
 
 '''
+Check that the Kali linux sources have been set in /etc/apt/sources.list (as when you install from CD, they are not).
+'''
+def check_kali_sources(config):
+    progress = log.progress("Checking sources file...")
+    sources_file_path = config["kali-sources"]["sources-file"]
+    if not path.isfile(sources_file_path):
+        progress.failure("Failed.")
+        log.failure("Configured sources file does not exist, please check the config and try again.")
+    sources_file = open(sources_file_path, 'a+')
+    kali_repo = config["kali-sources"]["repo"]
+    repo_configured = False
+    for line in sources_file:
+        if kali_repo in line and "#" not in line:
+            repo_configured = True
+            progress.success("Already configured.")
+            break
+    if not repo_configured:
+        sources_file.write(kali_repo)
+        progress.success("Repo added.")
+    sources_file.close()
+
+'''
 Update the Kali distribution using apt-get.
 '''
 def update_kali(config):
@@ -151,8 +173,9 @@ def main():
 
     if args.run:
         log.info("***** mykali Kali setup script by m0rv4i *****\n\n")
-        log.info("Check the mykali.log file for subprocess logs")
+        log.info("Check the mykali.log file for subprocess logs.")
         config = load_config(directory)
+        check_kali_sources(config)
         update_kali(config)
         install_requirements(config)
         install_packages(config)
