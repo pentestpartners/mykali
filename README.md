@@ -16,10 +16,6 @@ The idea here is you have a google drive/dropbox/git repository with your dotfil
 
 TODO explain config.json
 
-## Install
-
-Installation can be done by running the `install.sh` script from the repository directory.
-
 ## Running
 
 To get help run the script without args or with the `-h` or `--help` option:
@@ -97,7 +93,7 @@ To run the script and specify the directory holding the config files, use the `-
 - [x] Have the script install tools from the distro repos
 - [x] Have the script run any necessary extra install commands for the git repos, such as pip/setup/extra linking
 - [x] Have the script take a directory parameter for backed up config directories
-- [ ] It's a bit daft we need an install script to install stuff so remove that
+- [x] It's a bit daft we need an install script to install stuff so remove that
 - [ ] Have the script be able to run custom commands from the configuration file
 - [ ] Have the script be able to manage installing config files (.zshrc, .bashrc etc)
 - [ ] Have the script handle environment variables for paths etc.

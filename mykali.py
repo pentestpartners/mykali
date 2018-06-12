@@ -3,9 +3,27 @@
 import json
 import argparse
 from subprocess import Popen
-from pwn import log
 from sys import exit
 from os import chdir, path
+
+class Logger:
+
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    RED = '\033[91m'
+    ENDC = '\033[0m'
+    
+    @staticmethod
+    def info(message):
+        print "[%s*%s] %s" % (Logger.BLUE, Logger.ENDC, message)
+
+    @staticmethod
+    def success(message):
+        print "[%s+%s] %s" % (Logger.GREEN, Logger.ENDC, message)
+    
+    @staticmethod
+    def failure(message):
+        print "[%s-%s] %s" % (Logger.RED, Logger.ENDC, message)
 
 # The log file used by the subprocesses
 stdout = open("mykali.log", 'a')
@@ -14,13 +32,13 @@ stdout = open("mykali.log", 'a')
 Load the config.json config file in as a dictionary.
 '''
 def load_config(directory):
-	progress = log.progress("Loading config from %s" % directory)
+	Logger.info("Loading config from %s" % directory)
         if not path.isdir(directory):
-            progress.failure("%s does not exist, please check and try again." % directory)
+            Logger.failure("Directory does not exist, please check and try again.")
             exit(1)
 	config_file = open(path.join(directory, 'config.json'), 'r')
 	config = json.load(config_file)
-	progress.success("Config loaded successfully!")
+	Logger.success("Config loaded successfully!")
         config_file.close()
 	return config
 
@@ -28,66 +46,66 @@ def load_config(directory):
 Check that the Kali linux sources have been set in /etc/apt/sources.list (as when you install from CD, they are not).
 '''
 def check_kali_sources(config):
-    progress = log.progress("Checking sources file...")
+    Logger.info("Checking sources file...")
     sources_file_path = config["kali-sources"]["sources-file"]
     if not path.isfile(sources_file_path):
-        progress.failure("Failed.")
-        log.failure("Configured sources file does not exist, please check the config and try again.")
+        Logger.failure("Failed.")
+        Logger.failure("Configured sources file does not exist, please check the config and try again.")
     sources_file = open(sources_file_path, 'a+')
     kali_repo = config["kali-sources"]["repo"]
     repo_configured = False
     for line in sources_file:
         if kali_repo in line and "#" not in line:
             repo_configured = True
-            progress.success("Already configured.")
+            Logger.success("Already configured.")
             break
     if not repo_configured:
         sources_file.write(kali_repo)
-        progress.success("Repo added.")
+        Logger.success("Repo added.")
     sources_file.close()
 
 '''
 Update the Kali distribution using apt-get.
 '''
 def update_kali(config):
-	progress = log.progress("Updating Kali")
+	Logger.info("Updating Kali")
         process = Popen("apt-get update && apt-get full-upgrade -y", shell = True, stdout = stdout, stderr = stdout)
         process.wait()
         if process.returncode == 0:
-            progress.success("Done!")
+            Logger.success("Done!")
         else:
-            progress.failure("Failed.")
-            log.failure("Please check the log for more information")
+            Logger.failure("Failed.")
+            Logger.failure("Please check the log for more information.")
             exit(1)
 
 '''
 Install any packages that are required by this script (such as git).
 '''
 def install_requirements(config):
-    progress = log.progress("Installing requirements...")
+    Logger.info("Installing requirements...")
     package_list = ' '.join(map(str, config["requirements"])) 
     process = Popen("apt-get install -y %s" % package_list, shell = True, stdout = stdout, stderr = stdout)
     process.wait()
     if process.returncode == 0:
-        progress.success("Done!")
+        Logger.success("Done!")
     else:
-        progress.failure("Failed to install: %s" % package)
-        log.failure("Please check the log for more information")
+        Logger.failure("Failed to install: %s" % package)
+        Logger.failure("Please check the log for more information.")
         exit(1)
 '''
 Install any user defined packages.
 '''
 def install_packages(config):
     if len(config["packages"]) > 0:
-        progress = log.progress("Installing packages...")
+        Logger.info("Installing packages...")
         package_list = ' '.join(map(str, config["packages"])) 
         process = Popen("apt-get install -y %s" % package_list, shell = True, stdout = stdout, stderr = stdout)
         process.wait()
         if process.returncode == 0:
-            progress.success("Done!")
+            Logger.success("Done!")
         else:
-            progress.failure("Failed.")
-            log.failure("Please check the log for more information.")
+            Logger.failure("Failed.")
+            Logger.failure("Please check the log for more information.")
             exit(1)
 
 '''
@@ -96,49 +114,49 @@ Install any user defined git repositories.
 def install_git_repos(config):
     if "repos" in config["git"] and len(config["git"]["repos"]) > 0:
         errored = False
-        log.info("Cloning and configuring git repositories...")
+        Logger.info("Cloning and configuring git repositories...")
 
         for repo in config["git"]["repos"]:
             chdir(config["git"]["install_dir"])
             url = repo["url"]
             directory = repo["directory"]
-            progress = log.progress("Cloning: %s into %s" % (url, directory))
+            Logger.info("Cloning: %s into %s" % (url, directory))
 
             if path.isdir(directory):
-                progress.failure("The directory already exists, is it already installed?")
+                Logger.failure("The directory exists, is it already installed?")
                 continue
             
             process = Popen("git clone %s %s" % (url, directory), shell = True, stdout = stdout, stderr = stdout)
             process.wait()
 
             if process.returncode == 0:
-                progress.success("Complete.") 
+                Logger.success("Complete.") 
                 configure_git_repo(repo)
             else:
-                progress.failure("Failed, please check the log.")
+                Logger.failure("Failed, please check the log for more information.")
                 errored = True
 
-        # Once all is done, log a message depending on if any errored
+        # Once all is done, Logger a message depending on if any errored
         if errored:
-            log.success("Git cloning complete, but with some errors. Please check the log for specifics.")
+            Logger.success("Git cloning complete, but with some errors. Please check the Logger for specifics.")
         else:
-            log.success("Git cloning complete")
+            Logger.success("Git cloning complete")
 
 '''
 Configure/install the git repos if require - e.g. run pip install or setup scripts. The exact commands are defined in the config file. 
 '''
 def configure_git_repo(repo):
     if "install_cmds" in repo and len(repo["install_cmds"]) > 0:
-        progress = log.progress("Running repo setup scripts...")
+        Logger.info("Running repo setup scripts...")
         chdir(repo["directory"])
         for cmd in repo["install_cmds"]:
             process = Popen(cmd, shell = True, stdout = stdout, stderr = stdout)
             process.wait()
 
             if process.returncode == 0:
-                progress.success("Complete.") 
+                Logger.success("Complete.") 
             else:
-                progress.failure("Failed, please check the log.")
+                Logger.failure("Failed, please check the log for more information.")
                 break
 
 '''
@@ -159,12 +177,12 @@ def main():
     parser = create_arg_parser()
     args = parser.parse_args()
 
-    directory = path.dirname(__file__)
+    directory = path.dirname(path.realpath(__file__)) 
 
     if args.directory is not None:
         directory = args.directory
         if not path.isdir(directory):
-            log.failure("%s does not exist, please check and try again." % directory)
+            Logger.failure("%s does not exist, please check and try again." % directory)
             exit(1)
 
     if args.config:
@@ -172,8 +190,8 @@ def main():
         exit(0)
 
     if args.run:
-        log.info("***** mykali Kali setup script by m0rv4i *****\n\n")
-        log.info("Check the mykali.log file for subprocess logs.")
+        Logger.info("***** mykali Kali setup script by m0rv4i *****\n\n")
+        Logger.info("Check the mykali.log file for subprocess logs.")
         config = load_config(directory)
         check_kali_sources(config)
         update_kali(config)
