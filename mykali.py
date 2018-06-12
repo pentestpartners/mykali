@@ -169,9 +169,9 @@ Create an arg parser for handling the program arguments.
 def create_arg_parser():
     parser = argparse.ArgumentParser(description = 'A Kali Linux configuration tool')
     exclusive = parser.add_mutually_exclusive_group()
-    exclusive.add_argument("-r", "--run", help = "Run the setup with the current configuration", action="store_true")
-    exclusive.add_argument("-c", "--config", help = "Display the current configuration file", action="store_true")
-    parser.add_argument("-d", "--directory", help = "Specify the directory containing the config.json file.")
+    exclusive.add_argument("-r", "--run", help = "run the setup with the current configuration", action="store_true")
+    exclusive.add_argument("-c", "--config", help = "display the current configuration file", action="store_true")
+    parser.add_argument("-d", "--directory", help = "specify the directory containing the config.json file.")
     return parser
 
 '''

@@ -10,9 +10,19 @@ Are you tired of configuring and reconfiguring your Kali box across computers? O
 
 All you have to do is keep the **config.json** up to date with your desired configuration and you can run it quickly and easily on other boxes to get them up to scratch.
 
-## Configuration
+So far it has the capability to:
 
-The idea here is you have a google drive/dropbox/git repository with your dotfiles etc. and a **config.json**. You can then run the tool, point at that directory and it will configure the Kali box accordingly. 
+- Set up the **/etc/apt/sources.list** to check a source is configured
+- Fully update and upgrade Kali
+- Install a user configured list of packages
+- Clone a user configured set of git repositories to a folder (such as /opt)
+- Run install commands on those repositories (such as pip install, install.sh etc)
+
+There's also a roadmap of upcoming features at the bottom of the readme. Feel free to create issues for bugs/suggestions or and pull requests are welcome.
+
+# Configuration
+
+The idea here is you have a google drive/dropbox/git/whatever repository with your dotfiles etc. and a **config.json**. On a fresh build you can then grab that repository, clnoe this tool and then run it, pointing at that directory and it will configure the Kali box accordingly. 
 
 TODO explain config.json
 
@@ -105,6 +115,3 @@ To run the script and specify the directory holding the config files, use the `-
 - [ ] Another tool for mass updating git repositories 
 - [ ] Set shell
 - [ ] Change root password (from prompt, not config.json!)
-
-
-Pull requests and/or suggestions welcome.
