@@ -52,6 +52,13 @@ To run the script and specify the directory holding the config files, use the `-
 - [ ] Have the script be able to manage installing config files (.zshrc, .bashrc etc)
 - [ ] Have the script handle environment variables for paths etc.
 - [ ] Create a secondary tool for looping through an existing /opt directory (or wherever) and adding the repos to the config.json
+- [ ] Set the resolution
+- [ ] If a VM install VMware tools
+- [ ] Install a background/wallpaper
+- [ ] Look into a host script for VMs which will configure the VM appropriately (bridged/NAT'd etc)
+- [ ] Another tool for mass updating git repositories 
+- [ ] Set shell
+- [ ] Change root password (from prompt, not config.json!)
 
 
 Pull requests and/or suggestions welcome.
