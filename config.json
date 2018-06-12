@@ -19,9 +19,14 @@
 			},
 			{
 				"directory" : "ebowla",
-				"url" : "https://github.com/Genetic-Malware/Ebowla.git",
+				"url" : "https://github.com/Genetic-Malware/Ebowla.git"
+			},
+			{
+				"directory" : "impacket",
+				"url" : "https://github.com/CoreSecurity/impacket",
 				"install_cmds" : [
-					"whoami"
+					"pip install -r requirements.txt",
+					"python setup.py install"
 				]
 			}
 		]
