@@ -97,6 +97,7 @@ To run the script and specify the directory holding the config files, use the `-
 - [x] Have the script install tools from the distro repos
 - [x] Have the script run any necessary extra install commands for the git repos, such as pip/setup/extra linking
 - [x] Have the script take a directory parameter for backed up config directories
+- [ ] It's a bit daft we need an install script to install stuff so remove that
 - [ ] Have the script be able to run custom commands from the configuration file
 - [ ] Have the script be able to manage installing config files (.zshrc, .bashrc etc)
 - [ ] Have the script handle environment variables for paths etc.
