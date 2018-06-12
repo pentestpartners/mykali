@@ -12,7 +12,7 @@ All you have to do is keep the **config.json** up to date with your desired conf
 
 ## Configuration
 
-All the configuration is stored in the **config.json** file.
+The idea is here is you have a google drive/dropbox/git repository with your dotfiles etc. and a **config.json**. You can then run the tool, point at that directory and it will configure the Kali box accordingly. 
 
 TODO
 
@@ -34,15 +34,22 @@ To run the script with the current config use the `-r` or `--run` option:
 ./mykali.py --run
 ```
 
+To run the script and specify the directory holding the config files, use the `-d` or `--directory` option:
+
+```
+./mykali.py --run --directory ~/Downloads/config
+```
+
 ## Roadmap
 
 - [ ] Have the script check the /etc/apt/sources.list is up to date (in case install from CD)
 - [x] Have the script update Kali 
 - [x] Have the script clone a configurable list of git repos 
-- [ ] Have the script install tools from the distro repos
+- [x] Have the script install tools from the distro repos
 - [x] Have the script run any necessary extra install commands for the git repos, such as pip/setup/extra linking
+- [x] Have the script take a directory parameter for backed up config directories
 - [ ] Have the script be able to run custom commands from the configuration file
-- [ ] Have the script be able to manage installing config files in some way (how?)
+- [ ] Have the script be able to manage installing config files in some way
 - [ ] Have the script handle environment variables for paths etc.
 - [ ] Create a secondary tool for looping through an existing /opt directory (or wherever) and adding the repos to the config.json
 

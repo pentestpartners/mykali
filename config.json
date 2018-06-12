@@ -2,6 +2,10 @@
 	"requirements" : [
 		"git"
 	],
+	"packages" : [
+		"byobu",
+		"python-pip"
+	],
 	"git" : {
 		"install_dir": "/opt",
 		"repos" : [
