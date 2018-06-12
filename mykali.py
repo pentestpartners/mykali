@@ -11,7 +11,7 @@ from os import chdir, path
 stdout = open("mykali.log", 'a')
 
 '''
-Load the config.json config file in as a dictionary
+Load the config.json config file in as a dictionary.
 '''
 def load_config(directory):
 	progress = log.progress("Loading config from %s" % directory)
@@ -52,7 +52,9 @@ def install_requirements(config):
         progress.failure("Failed to install: %s" % package)
         log.failure("Please check the log for more information")
         exit(1)
-
+'''
+Install any user defined packages.
+'''
 def install_packages(config):
     if len(config["packages"]) > 0:
         progress = log.progress("Installing packages...")
@@ -118,7 +120,7 @@ def configure_git_repo(repo):
                 break
 
 '''
-Create an arg parser for handling the program arguments
+Create an arg parser for handling the program arguments.
 '''
 def create_arg_parser():
     parser = argparse.ArgumentParser(description = 'A Kali Linux configuration tool')
@@ -129,7 +131,7 @@ def create_arg_parser():
     return parser
 
 '''
-Main method
+Main method.
 '''
 def main():
     parser = create_arg_parser()
