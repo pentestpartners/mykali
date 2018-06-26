@@ -7,26 +7,304 @@
 		"git"
 	],
 	"packages" : [
+		"arp-scan",
+		"beef-xss",
+		"bind9-host",
 		"byobu",
-		"python-pip"
+		"ccze",
+		"crackmapexec",
+		"curl",
+		"dos2unix",
+		"dirbuster",
+		"dnsrecon",
+		"dnsutils",
+		"enum4linux",
+		"ethtool",
+		"exploitdb",
+		"exploitdb-bin-sploits",
+		"ftp",
+	  	"git",
+		"gdb",
+		"gdbserver",
+	  	"gobuster",
+		"vim-gtk3",
+		"hashcat",
+		"hydra",
+		"iodine",
+	  	"libc6:i386",
+		"libncurses5:i386",
+		"libstdc++6:i386",
+	  	"locales",
+	  	"locate",
+		"ltrace",
+	  	"make",
+		"man-db",
+		"masscan",
+		"minicom",
+		"mimikatz",
+		"nasm",
+		"net-tools",
+	  	"nmap",
+	  	"openjdk-8-jdk",
+	  	"openvpn",
+	  	"python-impacket",
+	  	"python-pip",
+		"python3-pip",
+		"radare2",
+	  	"recon-ng",
+	  	"responder",
+		"set",
+		"shellter",
+	  	"sqlmap",
+	  	"sslscan",
+		"strace",
+		"thc-ipv6",
+		"theharvester",
+		"tshark",
+		"urlcrazy",
+		"wifite",
+		"windows-binaries",
+		"whois",
+	  	"wordlists",
+	  	"wpscan",
+	  	"yersinia",
+	  	"vim",
+	  	"vim-nox",
+	  	"vlan",
+	  	"zsh"
 	],
 	"git" : {
 		"install_dir": "/opt",
 		"repos" : [
 			{
-				"directory" : "seclists",
-				"url" : "https://github.com/danielmiessler/SecLists.git"
+				"directory" : "aquatone",
+				"url" : "https://github.com/michenriksen/aquatone.git",
+				"install_cmds" : [
+					"gem install aquatone"
+				]
+			},
+			{
+				"directory" : "baudrate",
+				"url" : "https://github.com/devttys0/baudrate.git"
+			},
+			{
+				"directory" : "BloodHound",
+				"url" : "https://github.com/BloodHoundAD/BloodHound.git"
+			},
+			{
+				"directory" : "bettercap-caplets",
+				"url" : "https://github.com/bettercap/caplets.git"
+			},
+			{
+				"directory" : "dirsearch",
+				"url" : "https://github.com/maurosoria/dirsearch.git",
+				"install_cmds" : [
+					"gem install aquatone"
+				]
+			},
+			{
+				"directory" : "discover",
+				"url" : "https://github.com/leebaird/discover.git",
+				"install_cmds" : [
+					"./update.sh"
+				]
+			},
+			{
+				"directory" : "domainhunter",
+				"url" : "https://github.com/threatexpress/domainhunter.git",
+				"install_cmds" : [
+					"pip3 install -r requirements.txt",
+					"apt-get install -y tesseract-ocr python3-imaging"
+				]
+			},
+			{
+				"directory" : "ducky",
+				"url" : "https://github.com/hak5darren/USB-Rubber-Ducky.git"
 			},
 			{
 				"directory" : "ebowla",
 				"url" : "https://github.com/Genetic-Malware/Ebowla.git"
 			},
 			{
-				"directory" : "impacket",
-				"url" : "https://github.com/CoreSecurity/impacket",
+				"directory" : "Egress-Assess",
+				"url" : "https://github.com/FortyNorthSecurity/Egress-Assess.git",
 				"install_cmds" : [
-					"pip install -r requirements.txt",
+					"./setup/setup.sh"
+				]
+			},
+			{
+				"directory" : "Empire",
+				"url" : "https://github.com/EmpireProject/Empire.git",
+				"install_cmds" : [
+					"./setup/install.sh"
+				]
+			},
+			{
+				"directory" : "EyeWitness",
+				"url" : "https://github.com/FortyNorthSecurity/EyeWitness.git",
+				"install_cmds" : [
+					"./setup/setup.sh"
+				]
+			},
+			{
+				"directory" : "fluxion",
+				"url" : "--recursive https://github.com/FluxionNetwork/fluxion.git",
+				"install_cmds" : [
+					"./fluxion.sh"
+				]
+			},
+			{
+				"directory" : "hashcat-utils",
+				"url" : "https://github.com/hashcat/hashcat-utils.git"
+			},
+			{
+				"directory" : "httpscreenshot",
+				"url" : "https://github.com/breenmachine/httpscreenshot.git",
+				"install_cmds" : [
+					"./install-dependencies.sh"
+				]
+			},
+			{
+				"directory" : "impacket",
+				"url" : "https://github.com/CoreSecurity/impacket.git",
+				"install_cmds" : [
+					"pip install ."
+				]
+			},
+			{
+				"directory" : "kaliscripts",
+				"url" : "https://github.com/m0rv4i/KaliScripts.git"
+			},
+			{
+				"directory" : "linenum",
+				"url" : "https://github.com/rebootuser/LinEnum.git"
+			},
+			{
+				"directory" : "linuxprivchecker",
+				"url" : "https://github.com/sleventyeleven/linuxprivchecker.git"
+			},
+			{
+				"directory" : "mimikittenz",
+				"url" : "https://github.com/putterpanda/mimikittenz.git"
+			},
+			{
+				"directory" : "mona",
+				"url" : "https://github.com/corelan/mona.git"
+			},
+			{
+				"directory" : "nishang",
+				"url" : "https://github.com/samratashok/nishang.git"
+			},
+			{
+				"directory" : "nmap-summariser",
+				"url" : "https://github.com/cornerpirate/nmap-summariser.git"
+			},
+			{
+				"directory" : "nosqlmap",
+				"url" : "https://github.com/codingo/NoSQLMap.git",
+				"install_cmds" : [
 					"python setup.py install"
+				]
+			},
+			{
+				"directory" : "photon",
+				"url" : "https://github.com/s0md3v/Photon.git"
+			},
+			{
+				"directory" : "PowerSploit",
+				"url" : "https://github.com/PowerShellMafia/PowerSploit.git"
+			},
+			{
+				"directory" : "PowerUpSQL",
+				"url" : "https://github.com/NetSPI/PowerUpSQL.git"
+			},
+			{
+				"directory" : "prowl",
+				"url" : "https://github.com/nettitude/Prowl.git",
+				"install_cmds" : [
+					"pip install -r requirements.txt"
+				]
+			},
+			{
+				"directory" : "proxmark",
+				"url" : "https://github.com/Proxmark/proxmark3.git",
+				"install_cmds" : [
+					"apt-get -y install git build-essential libreadline5 libreadline-dev gcc-arm-none-eabi libusb-0.1-4 libusb-dev libqt4-dev ncurses-dev perl pkg-config",
+					"make clean && make all"
+				]
+			},
+			{
+				"directory" : "PS-Attack",
+				"url" : "https://github.com/jaredhaight/PSAttack.git"
+			},
+			{
+				"directory" : "pycave",
+				"url" : "https://github.com/axcheron/pycave.git",
+				"install_cmds" : [
+					"pip3 install -r requirements.txt"
+				]
+			},
+			{
+				"directory" : "Responder",
+				"url" : "https://github.com/SpiderLabs/Responder.git"
+			},
+			{
+				"directory" : "ropper",
+				"url" : "https://github.com/sashs/Ropper.git",
+				"install_cmds" : [
+					"pip install captstone filebytes keystone-engine",
+					"python setup.py install"
+				]
+			},
+			{
+				"directory" : "routersploit",
+				"url" : "https://github.com/threat9/routersploit.git",
+				"install_cmds" : [
+					"pip install -r requirements.txt"
+				]
+			},
+			{
+				"directory" : "scapy",
+				"url" : "https://github.com/secdev/scapy.git"
+			},
+			{
+				"directory" : "seclists",
+				"url" : "https://github.com/danielmiessler/SecLists.git",
+				"install_cmds" : [
+					"mkdir /wordlists",
+					"ln -s /opt/seclists /wordlists/seclists"
+				]
+			},
+			{
+				"directory" : "sharpshooter",
+				"url" : "https://github.com/mdsecactivebreach/SharpShooter.git",
+				"install_cmds" : [
+					"pip install -r requirements.txt"
+				]
+			},
+			{
+				"directory" : "sherlock",
+				"url" : "https://github.com/rasta-mouse/Sherlock.git"
+			},
+			{
+				"directory" : "sniper",
+				"url" : "https://github.com/1N3/Sn1per.git",
+				"install_cmds" : [
+					"./install.sh"
+				]
+			},
+			{
+				"directory" : "Veil",
+				"url" : "https://github.com/Veil-Framework/Veil.git",
+				"install_cmds" : [
+					"./config/setup.sh --force --silent"
+				]
+			},
+			{
+				"directory" : "wascan",
+				"url" : "https://github.com/m4ll0k/WAScan.git",
+				"install_cmds" : [
+					"pip install -r requirements.txt"
 				]
 			}
 		]
