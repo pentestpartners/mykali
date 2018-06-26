@@ -12,35 +12,58 @@ All you have to do is keep the **config.json** up to date with your desired conf
 
 So far it has the capability to:
 
-- Set up the **/etc/apt/sources.list** to check a source is configured
-- Fully update and upgrade Kali
-- Install a user configured list of packages
-- Clone a user configured set of git repositories to a folder (such as /opt)
-- Run install commands on those repositories (such as pip install, install.sh etc)
+- Set up the **/etc/apt/sources.list** to check a source is configured.
+- Fully update and upgrade Kali.
+- Install VMWare tools if in a VMWare VM.
+- Install a user configured list of `apt` packages.
+- Install a user configured list of python `pip` packages.
+- Run custom user shell commands.
+- Clone a user configured set of Git repositories to a folder (such as */opt*).
+- Run install commands on those repositories (such as `pip install`, `./install.sh` etc.).
+- Copy saved configuration files to a specified location (such as **.bashrc** files etc.).
 
 There's also a roadmap of upcoming features at the bottom of the readme. Feel free to create issues for bugs/suggestions or and pull requests are welcome.
 
-# Configuration
+## Example
+
+An example **config.json** is provided, in addition to a barebones copy at **bare-config.json**. This file installs and configures an install of Kali, and expects a *config_files* directory in the same directory as the **config.json** containing the configuration files to be copied, in this case .zshrc, .vimrc etc.
+
+## Configuration
 
 The idea here is you have a google drive/dropbox/git/whatever repository with your dotfiles etc. and a **config.json**. On a fresh build you can then grab that repository, clnoe this tool and then run it, pointing at that directory and it will configure the Kali box accordingly. 
 
-TODO explain config.json
+The **config.json** is broken down into multiple sections **which are applied in the following order**:
+
+* **kali-sources** - The location of the `apt` sources file and the repository URL to add.
+* **requirements** - `apt` packages to install that are required my the script.
+* **vm** - Virtual Machine configuration, such as VMWare Tools.
+* **packages** - User defined apt packages to install.
+* **pip installs** - User defined python pip packages to install.
+* **cmds** - User defined additional commands to run.
+* **git** - Git repositories to install. Includes configuration for the parent install directory (defaults to */opt*), any hosts to `ssh-keyscan`, the repository install directory, repository URL and any install commands for that repository (such as `pip install`, `gem install` etc.).
+* **config_files** - Any files to copy from the *config_files* and where to. The configuration is in the form of the target directory and then a list of files to place in that directory.
 
 ## Running
 
 To get help run the script without args or with the `-h` or `--help` option:
 ```
 # ./mykali.py
-usage: mykali.py [-h] [-r | -c] [-d DIRECTORY]
+usage: mykali.py [-h] [-r | -u | -c] [-d DIRECTORY]
 
 A Kali Linux configuration tool
 
 optional arguments:
   -h, --help            show this help message and exit
-  -r, --run             Run the setup with the current configuration
-  -c, --config          Display the current configuration file
+  -r, --run             run the setup with the current configuration
+  -u, --update          just update existing configuration. Updates Kali, pip
+                        installs and Git repositories/installations. The
+                        update command assumes the run command has been
+                        completed successfully at least once.
+  -c, --config          display the current configuration file
   -d DIRECTORY, --directory DIRECTORY
-                        Specify the directory containing the config.json file.
+                        specify the directory containing the config.json file
+                        and config_files directory.
+
 ```
 
 To view the current config, run the script with `-c` or `--config`:
@@ -48,70 +71,105 @@ To view the current config, run the script with `-c` or `--config`:
 ```
 # ./mykali.py --config
 {
-        "kali-sources" : {
-                "sources-file" : "/etc/apt/sources.list",
-                "repo" : "deb http://http.kali.org/kali kali-rolling main contrib non-free"
-        },
-        "requirements" : [
-                "git"
-        ],
-        "packages" : [
-                "byobu",
-                "python-pip"
-        ],
-        "git" : {
-                "install_dir": "/opt",
-                "repos" : [
-                        {
-                                "directory" : "seclists",
-                                "url" : "https://github.com/danielmiessler/SecLists.git"
-                        },
-                        {
-                                "directory" : "ebowla",
-                                "url" : "https://github.com/Genetic-Malware/Ebowla.git"
-                        },
-                        {
-                                "directory" : "impacket",
-                                "url" : "https://github.com/CoreSecurity/impacket",
-                                "install_cmds" : [
-                                        "pip install -r requirements.txt",
-                                        "python setup.py install"
-                                ]
-                        }
-                ]
-        }
+	"kali-sources" : {
+		"sources-file" : "/etc/apt/sources.list",
+		"repo" : "deb http://http.kali.org/kali kali-rolling main contrib non-free"
+	},
+	"requirements" : [
+		"git"
+	],
+	"vm" : {
+		"is_vmware" : true
+	},
+	"packages" : [
+		"arp-scan",
+		"gdb",
+	  	"gobuster",
+		"hashcat",
+	  	"zsh"
+	],
+	"pip_installs" : [
+		"powerline-status"
+	],
+	"cmds" : [
+		"ln -s /usr/share/wordlists /wordlists",
+		"byobu-enable",
+		"passwd"
+	],
+	"git" : {
+		"install_dir": "/opt",
+		"ssh_keyscans" : [
+			"github.com"
 
+		],
+		"repos" : [
+			{
+				"directory" : "aquatone",
+				"url" : "https://github.com/michenriksen/aquatone.git",
+				"install_cmds" : [
+					"gem install aquatone"
+				]
+			},
+			{
+				"directory" : "discover",
+				"url" : "https://github.com/leebaird/discover.git",
+				"install_cmds" : [
+					"./update.sh"
+				]
+			},
+			{
+				"directory" : "linenum",
+				"url" : "https://github.com/rebootuser/LinEnum.git"
+			}
+		]
+	},
+		"config_files" : [
+			{
+				"~" : [
+					".zshrc"
+				]
+			}
+	]
 }
+
 ```
 
-To run the script with the current config use the `-r` or `--run` option:
+To run the script with the current configuration in the script's directory use the `-r` or `--run` option:
 ```
 ./mykali.py --run
 ```
 
-To run the script and specify the directory holding the config files, use the `-d` or `--directory` option:
+To run the script and specify the directory holding the *config.json* and *config_files* directory, use the `-d` or `--directory` option:
 
 ```
 ./mykali.py --run --directory ~/Downloads/config
 ```
 
+To just have the script update Kali plus the installed pip tools and Git repositories, use the `-u` or `--update` option:
+
+```
+./mykali.py --update --directory ~/Downloads/config
+```
+
 ## Roadmap
 
-- [x] Have the script check the /etc/apt/sources.list is up to date (in case install from CD)
+- [x] Have the script check the */etc/apt/sources.list* is up to date (in case install from CD)
 - [x] Have the script update Kali 
 - [x] Have the script clone a configurable list of git repos 
 - [x] Have the script install tools from the distro repos
 - [x] Have the script run any necessary extra install commands for the git repos, such as pip/setup/extra linking
 - [x] Have the script take a directory parameter for backed up config directories
 - [x] It's a bit daft we need an install script to install stuff so remove that
-- [ ] Have the script be able to run custom commands from the configuration file
-- [ ] Have the script be able to manage installing config files (.zshrc, .bashrc etc)
+- [x] Have the script be able to run custom commands from the configuration file
+- [x] Have the script be able to manage installing config files (.zshrc, .bashrc etc)
+- [x] Install pip packages
+- [x] `ssh-keyscan` repository sites (Github etc.)
+- [x] If a VM install VMware tools (currently only VMWare)
+- [x] Another tool for mass updating git repositories 
 - [ ] Have the script handle environment variables for paths etc.
 - [ ] Create a secondary tool for looping through an existing /opt directory (or wherever) and adding the repos to the config.json
-- [ ] Set the resolution
-- [ ] If a VM install VMware tools
-- [ ] Install a background/wallpaper
+- [ ] Set the resolution (Currently possible via a command.)
+- [ ] Install a background/wallpaper (very important!) (Currently possible via a command.)
 - [ ] Look into a host script for VMs which will configure the VM appropriately (bridged/NAT'd etc)
-- [ ] Another tool for mass updating git repositories 
-- [ ] Set shell
-- [ ] Change root password (from prompt, not config.json!)
+- [ ] Set shell (Currently possible via a command.)
+- [ ] Change root password (from prompt, not **config.json**! Currently possible via a command.)

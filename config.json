@@ -6,6 +6,9 @@
 	"requirements" : [
 		"git"
 	],
+	"vm" : {
+		"is_vmware" : true
+	},
 	"packages" : [
 		"arp-scan",
 		"beef-xss",
@@ -22,14 +25,18 @@
 		"ethtool",
 		"exploitdb",
 		"exploitdb-bin-sploits",
+		"fonts-powerline",
 		"ftp",
 	  	"git",
 		"gdb",
 		"gdbserver",
 	  	"gobuster",
+	  	"gtk-chtheme",
 		"vim-gtk3",
 		"hashcat",
 		"hydra",
+		"i3",
+		"i3blocks",
 		"iodine",
 	  	"libc6:i386",
 		"libncurses5:i386",
@@ -37,6 +44,7 @@
 	  	"locales",
 	  	"locate",
 		"ltrace",
+		"lxappearance",
 	  	"make",
 		"man-db",
 		"masscan",
@@ -73,8 +81,24 @@
 	  	"vlan",
 	  	"zsh"
 	],
+	"pip_installs" : [
+		"powerline-status"
+	],
+	"cmds" : [
+		"ln -s /usr/share/wordlists /wordlists",
+		"gunzip /wordlists/rockyou.txt.gz",
+		"wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true",
+		"byobu-enable",
+		"sed -i.bak '/^Exec=/ s/default/i3/' /usr/share/gdm/BuiltInSessions/default.desktop",
+		"passwd"
+	],
 	"git" : {
 		"install_dir": "/opt",
+		"ssh_keyscans" : [
+			"bitbucket.org",
+			"github.com"
+
+		],
 		"repos" : [
 			{
 				"directory" : "aquatone",
@@ -148,10 +172,7 @@
 			},
 			{
 				"directory" : "fluxion",
-				"url" : "--recursive https://github.com/FluxionNetwork/fluxion.git",
-				"install_cmds" : [
-					"./fluxion.sh"
-				]
+				"url" : "--recursive https://github.com/FluxionNetwork/fluxion.git"
 			},
 			{
 				"directory" : "hashcat-utils",
@@ -271,7 +292,6 @@
 				"directory" : "seclists",
 				"url" : "https://github.com/danielmiessler/SecLists.git",
 				"install_cmds" : [
-					"mkdir /wordlists",
 					"ln -s /opt/seclists /wordlists/seclists"
 				]
 			},
@@ -308,6 +328,13 @@
 				]
 			}
 		]
-	}
-
+	},
+		"config_files" : [
+			{
+				"~" : [
+					".zshrc",
+					".vimrc"
+				]
+			}
+	]
 }
