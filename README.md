@@ -22,6 +22,8 @@ So far it has the capability to:
 - Run install commands on those repositories (such as `pip install`, `./install.sh` etc.).
 - Copy saved configuration files to a specified location (such as **.bashrc** files etc.).
 
+The tool can also be used to update Kali along with all the pip/Git tools.
+
 There's also a roadmap of upcoming features at the bottom of the readme. Feel free to create issues for bugs/suggestions or and pull requests are welcome.
 
 ## Example
