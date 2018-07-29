@@ -127,11 +127,20 @@ To view the current config, run the script with `-c` or `--config`:
 	},
 		"config_files" : [
 			{
-				"~" : [
-					".zshrc"
-				]
+				"config_file_dir" : "/opt/configfiles",
+				"targets": {
+					"~" : [
+						".byobu",
+						".vimrc",
+						".zshenv",
+						".zshrc"
+					],
+					"~/.oh-my-zsh/themes" : [
+						"my-fino.zsh-theme"
+					]	
+				}
 			}
-	]
+		]
 }
 
 ```
@@ -168,6 +177,7 @@ To just have the script update Kali plus the installed pip tools and Git reposit
 - [x] `ssh-keyscan` repository sites (Github etc.)
 - [x] If a VM install VMware tools (currently only VMWare)
 - [x] Another tool for mass updating git repositories 
+- [x] Have Git check for updates before pulling and rebuilding
 - [ ] Have the script handle environment variables for paths etc.
 - [ ] Create a secondary tool for looping through an existing /opt directory (or wherever) and adding the repos to the config.json
 - [ ] Set the resolution (Currently possible via a command.)
