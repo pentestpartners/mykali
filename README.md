@@ -1,7 +1,5 @@
 # mykali
 
-**This is a WIP, it's not even at version 1.0 yet!**
-
 ## Linux setup tool for Kali Linux.
 
 Are you tired of configuring and reconfiguring your Kali box across computers? Or getting things back "just the way you like it" after a VM dies or your hard-drive is wiped? Then maybe this is the tool for you!
@@ -22,13 +20,13 @@ So far it has the capability to:
 - Run install commands on those repositories (such as `pip install`, `./install.sh` etc.).
 - Copy saved configuration files to a specified location (such as **.bashrc** files etc.).
 
-The tool can also be used to update Kali along with all the pip/Git tools.
+*The tool can also be used to update Kali along with all the pip/Git tools.*
 
 There's also a roadmap of upcoming features at the bottom of the readme. Feel free to create issues for bugs/suggestions or and pull requests are welcome.
 
 ## Example
 
-An example **config.json** is provided, in addition to a barebones copy at **bare-config.json**. This file installs and configures an install of Kali, and expects a *config_files* directory in the same directory as the **config.json** containing the configuration files to be copied, in this case .zshrc, .vimrc etc.
+An example **config.json** is provided, in addition to a barebones copy at **bare-config.json**. This file installs and configures an install of Kali, and if the *config_files* section is filled then it will copy files from that directory the configured locations, e.g. copy saved .zshrc, .vimrc files to home.
 
 ## Configuration
 
@@ -43,7 +41,7 @@ The **config.json** is broken down into multiple sections **which are applied in
 * **pip installs** - User defined python pip packages to install.
 * **cmds** - User defined additional commands to run.
 * **git** - Git repositories to install. Includes configuration for the parent install directory (defaults to */opt*), any hosts to `ssh-keyscan`, the repository install directory, repository URL and any install commands for that repository (such as `pip install`, `gem install` etc.).
-* **config_files** - Any files to copy from the *config_files* and where to. The configuration is in the form of the target directory and then a list of files to place in that directory.
+* **config_files** - Any files to copy from the *config_files* directory and where to. The configuration is in the form of the target directory and then a list of files to place in that directory.
 
 ## Running
 
@@ -63,8 +61,7 @@ optional arguments:
                         completed successfully at least once.
   -c, --config          display the current configuration file
   -d DIRECTORY, --directory DIRECTORY
-                        specify the directory containing the config.json file
-                        and config_files directory.
+                        specify the directory containing the config.json.
 
 ```
 
@@ -150,7 +147,7 @@ To run the script with the current configuration in the script's directory use t
 ./mykali.py --run
 ```
 
-To run the script and specify the directory holding the *config.json* and *config_files* directory, use the `-d` or `--directory` option:
+To run the script and specify the directory holding the *config.json* use the `-d` or `--directory` option:
 
 ```
 ./mykali.py --run --directory ~/Downloads/config
