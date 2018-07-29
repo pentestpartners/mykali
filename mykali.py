@@ -2,7 +2,7 @@
 
 import json
 import argparse
-from subprocess import Popen
+from subprocess import Popen, check_output
 from sys import exit
 from os import chdir, path
 from shutil import copy2
@@ -214,37 +214,53 @@ def update_git_repos(config):
             exit(7)
         for repo in config["git"]["repos"]:
             directory = repo["directory"]
-            chdir(path.join(install_dir, directory))
-            Logger.info("Updating: %s%s%s" % (Logger.BLUE, directory, Logger.ENDC))
-
-            process = Popen("git remote update", shell = True)
-            process.wait()
-            
-            if process.returncode != 0:
-                Logger.failure("Failed to update repository")
-                errored = True
-                continue
-            
-            local = check_output('git rev-parse @', shell = True)
-            remote = check_output('git rev-parse @{u}', shell = True)
-            base = check_output('git merge-base @ @{u}', shell = True)
-
-            if local == remote:
-                Logger.success("Up-to-date")
-            elif local == base:
-                process = Popen("git pull", shell = True)
-                process.wait()
+            repo_dir = path.join(install_dir, directory)
+            if not path.isdir(repo_dir):
+                url = repo["url"]
+                Logger.info("Cloning: %s into %s%s%s" % (url, Logger.BLUE, directory, Logger.ENDC))
                 chdir(install_dir)
+                process = Popen("git clone %s %s" % (url, directory), shell = True)
+                process.wait()
+
                 if process.returncode == 0:
                     Logger.success("Complete.") 
                     configure_git_repo(repo)
                 else:
                     Logger.failure("Failed.")
                     errored = True
-            elif remote == base:
-                Logger.info("Local branch is ahead.")
-            else
-                Logger.info("Branches have diverged.")
+
+            else:
+                chdir(path.join(install_dir, directory))
+                Logger.info("Updating: %s%s%s" % (Logger.BLUE, directory, Logger.ENDC))
+
+                process = Popen("git remote update", shell = True)
+                process.wait()
+                
+                if process.returncode != 0:
+                    Logger.failure("Failed to update repository")
+                    errored = True
+                    continue
+                
+                local = check_output('git rev-parse @', shell = True)
+                remote = check_output('git rev-parse @{u}', shell = True)
+                base = check_output('git merge-base @ @{u}', shell = True)
+
+                if local == remote:
+                    Logger.success("Up-to-date")
+                elif local == base:
+                    process = Popen("git pull", shell = True)
+                    process.wait()
+                    chdir(install_dir)
+                    if process.returncode == 0:
+                        Logger.success("Complete.") 
+                        configure_git_repo(repo)
+                    else:
+                        Logger.failure("Failed.")
+                        errored = True
+                elif remote == base:
+                    Logger.info("Local branch is ahead.")
+                else:
+                    Logger.info("Branches have diverged.")
 
         # Once all is done, log a message depending on if any errored
         if errored:

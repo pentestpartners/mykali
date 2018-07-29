@@ -226,7 +226,7 @@
 			},
 			{
 				"directory" : "JohnTheRipper",
-				"url" : "-b dev https://github.com/magnumripper/JohnTheRipper.git",
+				"url" : "https://github.com/magnumripper/JohnTheRipper.git",
 				"install_cmds" : [
 					"cd src && ./configure && make"
 				]
@@ -400,13 +400,10 @@
 			},
 			{
 				"directory" : "wascan",
-				"url" : "https://github.com/m4ll0k/WAScan.git",
-				"install_cmds" : [
-					"pip install -r requirements.txt"
-				]
+				"url" : "https://github.com/m4ll0k/WAScan.git"
 			},
 			{
-				"directory" : "Winows-Exploit=Suggester",
+				"directory" : "Windows-Exploit-Suggester",
 				"url" : "https://github.com/GDSSecurity/Windows-Exploit-Suggester.git",
 				"install_cmds" : [
 					"pip install xlrd --upgrade",
