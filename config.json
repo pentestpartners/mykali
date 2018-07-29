@@ -7,7 +7,7 @@
 		"git"
 	],
 	"vm" : {
-		"is_vmware" : true
+		"is_vmware" : false
 	},
 	"packages" : [
 		"arp-scan",
@@ -15,6 +15,7 @@
 		"bind9-host",
 		"byobu",
 		"ccze",
+		"compton",
 		"crackmapexec",
 		"curl",
 		"dos2unix",
@@ -25,6 +26,7 @@
 		"ethtool",
 		"exploitdb",
 		"exploitdb-bin-sploits",
+		"feh",
 		"fonts-powerline",
 		"ftp",
 	  	"git",
@@ -38,12 +40,8 @@
 		"i3",
 		"i3blocks",
 		"iodine",
-	  	"libc6:i386",
-		"libncurses5:i386",
-		"libstdc++6:i386",
 	  	"locales",
 	  	"locate",
-		"ltrace",
 		"lxappearance",
 	  	"make",
 		"man-db",
@@ -58,7 +56,6 @@
 	  	"python-impacket",
 	  	"python-pip",
 		"python3-pip",
-		"radare2",
 	  	"recon-ng",
 	  	"responder",
 		"set",
@@ -66,6 +63,7 @@
 	  	"sqlmap",
 	  	"sslscan",
 		"strace",
+		"sublist3r",
 		"thc-ipv6",
 		"theharvester",
 		"tshark",
@@ -89,7 +87,9 @@
 		"gunzip /wordlists/rockyou.txt.gz",
 		"wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true",
 		"byobu-enable",
+		"pip3 install powerline-status",
 		"sed -i.bak '/^Exec=/ s/default/i3/' /usr/share/gdm/BuiltInSessions/default.desktop",
+		"ssh-keygen",
 		"passwd"
 	],
 	"git" : {
@@ -101,11 +101,19 @@
 		],
 		"repos" : [
 			{
+				"directory" : "ADRecon",
+				"url" : "https://github.com/sense-of-security/ADRecon.git"
+			},
+						{
 				"directory" : "aquatone",
 				"url" : "https://github.com/michenriksen/aquatone.git",
 				"install_cmds" : [
 					"gem install aquatone"
 				]
+			},
+			{
+				"directory" : "ASREPRoast",
+				"url" : "https://github.com/HarmJ0y/ASREPRoast.git"
 			},
 			{
 				"directory" : "baudrate",
@@ -118,6 +126,10 @@
 			{
 				"directory" : "bettercap-caplets",
 				"url" : "https://github.com/bettercap/caplets.git"
+			},
+			{
+				"directory" : "cupp",
+				"url" : "https://github.com/Mebus/cupp.git"
 			},
 			{
 				"directory" : "dirsearch",
@@ -158,7 +170,7 @@
 			},
 			{
 				"directory" : "Empire",
-				"url" : "https://github.com/EmpireProject/Empire.git",
+				"url" : "-b dev https://github.com/EmpireProject/Empire.git",
 				"install_cmds" : [
 					"./setup/install.sh"
 				]
@@ -173,6 +185,14 @@
 			{
 				"directory" : "fluxion",
 				"url" : "--recursive https://github.com/FluxionNetwork/fluxion.git"
+			},
+			{
+				"directory" : "Get-LAPSPasswords",
+				"url" : "https://github.com/kfosaaen/Get-LAPSPasswords.git"
+			},
+			{
+				"directory" : "GPRegistryPolicy",
+				"url" : "https://github.com/PowerShell/GPRegistryPolicy.git"
 			},
 			{
 				"directory" : "hashcat-utils",
@@ -193,8 +213,39 @@
 				]
 			},
 			{
+				"directory" : "Inveigh",
+				"url" : "https://github.com/Kevin-Robertson/Inveigh.git"
+			},
+			{
+				"directory" : "Invoke-ACLPwn",
+				"url" : "https://github.com/fox-it/Invoke-ACLPwn.git"
+			},
+			{
+				"directory" : "JAWS",
+				"url" : "https://github.com/411Hall/JAWS.git"
+			},
+			{
+				"directory" : "JohnTheRipper",
+				"url" : "-b dev https://github.com/magnumripper/JohnTheRipper.git",
+				"install_cmds" : [
+					"cd src && ./configure && make"
+				]
+			},
+			{
 				"directory" : "kaliscripts",
 				"url" : "https://github.com/m0rv4i/KaliScripts.git"
+			},
+			{
+				"directory" : "KeeThief",
+				"url" : "https://github.com/HarmJ0y/KeeThief.git"
+			},
+			{
+				"directory" : "kerberoast",
+				"url" : "https://github.com/nidem/kerberoast.git"
+			},
+			{
+				"directory" : "kwprocessor",
+				"url" : "https://github.com/hashcat/kwprocessor.git"
 			},
 			{
 				"directory" : "linenum",
@@ -203,6 +254,14 @@
 			{
 				"directory" : "linuxprivchecker",
 				"url" : "https://github.com/sleventyeleven/linuxprivchecker.git"
+			},
+			{
+				"directory" : "mailsniper",
+				"url" : "https://github.com/dafthack/MailSniper.git"
+			},
+			{
+				"directory" : "mimikatz",
+				"url" : "https://github.com/gentilkiwi/mimikatz.git"
 			},
 			{
 				"directory" : "mimikittenz",
@@ -228,8 +287,16 @@
 				]
 			},
 			{
+				"directory" : "p0wnedShell",
+				"url" : "https://github.com/Cn33liz/p0wnedShell.git"
+			},
+			{
 				"directory" : "photon",
 				"url" : "https://github.com/s0md3v/Photon.git"
+			},
+			{
+				"directory" : "PowerShell-Suite",
+				"url" : "https://github.com/FuzzySecurity/PowerShell-Suite.git"
 			},
 			{
 				"directory" : "PowerSploit",
@@ -263,6 +330,13 @@
 				"url" : "https://github.com/axcheron/pycave.git",
 				"install_cmds" : [
 					"pip3 install -r requirements.txt"
+				]
+			},
+			{
+				"directory" : "radare2",
+				"url" : "https://github.com/radare/radare2.git",
+				"install_cmds" : [
+					"./sys/install.sh"
 				]
 			},
 			{
@@ -314,6 +388,10 @@
 				]
 			},
 			{
+				"directory" : "unicorn",
+				"url" : "https://github.com/trustedsec/unicorn.git"
+			},
+			{
 				"directory" : "Veil",
 				"url" : "https://github.com/Veil-Framework/Veil.git",
 				"install_cmds" : [
@@ -326,15 +404,36 @@
 				"install_cmds" : [
 					"pip install -r requirements.txt"
 				]
+			},
+			{
+				"directory" : "Winows-Exploit=Suggester",
+				"url" : "https://github.com/GDSSecurity/Windows-Exploit-Suggester.git",
+				"install_cmds" : [
+					"pip install xlrd --upgrade",
+					"./windows-exploit-suggester.py --update"
+				]
 			}
 		]
 	},
 		"config_files" : [
 			{
-				"~" : [
-					".zshrc",
-					".vimrc"
-				]
+				"config_file_dir" : "/opt/configfiles",
+				"targets": {
+					"~" : [
+						".byobu",
+						".config",
+						".gitconfig",
+						".gitignore",
+						".gtkrc-2.0",
+						".gvimrc",
+						".vimrc",
+						".zshenv",
+						".zshrc"
+					],
+					"~/.oh-my-zsh/themes" : [
+						"my-fino.zsh-theme"
+					]	
+				}
 			}
 	]
 }

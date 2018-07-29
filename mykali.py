@@ -116,7 +116,6 @@ def handle_vm(config):
             Logger.failure("Failed.")
             exit(12)
 
-
 '''
 Install any user defined packages.
 '''
@@ -132,7 +131,6 @@ def install_packages(config):
             Logger.failure("Failed.")
             exit(4)
 
-
 '''
 Install any user defined pip packages.
 '''
@@ -147,7 +145,6 @@ def install_pip_packages(config):
         else:
             Logger.failure("Failed.")
             exit(5)
-
 
 '''
 Run any user defined additional commands.
@@ -220,15 +217,34 @@ def update_git_repos(config):
             chdir(path.join(install_dir, directory))
             Logger.info("Updating: %s%s%s" % (Logger.BLUE, directory, Logger.ENDC))
 
-            process = Popen("git pull", shell = True)
+            process = Popen("git remote update", shell = True)
             process.wait()
-            chdir(install_dir)
-            if process.returncode == 0:
-                Logger.success("Complete.") 
-                configure_git_repo(repo)
-            else:
-                Logger.failure("Failed.")
+            
+            if process.returncode != 0:
+                Logger.failure("Failed to update repository")
                 errored = True
+                continue
+            
+            local = check_output('git rev-parse @', shell = True)
+            remote = check_output('git rev-parse @{u}', shell = True)
+            base = check_output('git merge-base @ @{u}', shell = True)
+
+            if local == remote:
+                Logger.success("Up-to-date")
+            elif local == base:
+                process = Popen("git pull", shell = True)
+                process.wait()
+                chdir(install_dir)
+                if process.returncode == 0:
+                    Logger.success("Complete.") 
+                    configure_git_repo(repo)
+                else:
+                    Logger.failure("Failed.")
+                    errored = True
+            elif remote == base:
+                Logger.info("Local branch is ahead.")
+            else
+                Logger.info("Branches have diverged.")
 
         # Once all is done, log a message depending on if any errored
         if errored:
@@ -259,13 +275,13 @@ Copies any user config files from the configuration directory to the specified l
 def install_config_files(config):
     if len(config["config_files"]) > 0:
         Logger.info("Copying configuration files...")
-        config_file_dir = path.join(config["directory"], 'config_files')
+        config_file_dir = config["config_files"]["config_file_dir"]
         if path.isdir(config_file_dir):
             path.chdir(config_file_dir)
         else:
             Logger.failure("config_files directory does not exist")
             exit(10)
-        for target in config["config_files"]:
+        for target in config["config_files"]["targets"]:
             for file in config["config_files"][target]:
                 if path.isfile(path.join(config_file_dir, file)):
                     try:
@@ -275,7 +291,6 @@ def install_config_files(config):
                         exit(11)
                 else:
                     Logger.failure("Target config file doesn't exist in the config_files directory: %s" % file)
-
 
 '''
 Create an arg parser for handling the program arguments.
