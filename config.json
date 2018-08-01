@@ -206,6 +206,14 @@
 				]
 			},
 			{
+				"directory" : "icebreaker",
+				"url" : "https://github.com/DanMcInerney/icebreaker.git",
+			
+				"install_cmds" : [
+					"./setup.sh"
+				]
+			},
+			{
 				"directory" : "impacket",
 				"url" : "https://github.com/CoreSecurity/impacket.git",
 				"install_cmds" : [
