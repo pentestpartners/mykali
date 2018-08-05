@@ -173,6 +173,8 @@ To create a template **config.json** based on the current system, use the `-m` o
 ```
 This will ask the user a few questions and then generate a the file with the git repositories, packages and so on installed on the current system added to the file. The result it not a finished file however, and should be manually checked! For example, install commands for git repositories are not added, and will have to be added manually.
 
+The only caveat for this is that, on standard Kali linux, a lot of the pre-installed tools count as 'manually installed' so these will be listed in the packages, but can be removed from the final file if not required.
+
 ## Roadmap
 
 - [x] Have the script check the */etc/apt/sources.list* is up to date (in case install from CD)
