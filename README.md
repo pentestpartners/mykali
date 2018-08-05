@@ -130,15 +130,16 @@ To view the current config, run the script with `-c` or `--config`:
 		"config_file_dir" : "/opt/configfiles",
 		"targets": [
 			{
-				"~" : [
-				".gitconfig",
-				".gitignore",
-				".vimrc",
-				".zshrc"
+				"target_dir" : "~",
+				"files" : [
+					".gitconfig",
+					".vimrc",
+					".zshrc"
 				]
 			},
 			{
-				"~/.oh-my-zsh/themes" : [
+				"target_dir" : "~/.oh-my-zsh/themes",
+				"files" : [
 					"my-theme.zsh-theme"
 				]	
 			}

@@ -424,20 +424,22 @@
 		"config_file_dir" : "/opt/configfiles",
 		"targets": [
 			{
-				"~" : [
-				".byobu",
-				".config",
-				".gitconfig",
-				".gitignore",
-				".gtkrc-2.0",
-				".gvimrc",
-				".vimrc",
-				".zshenv",
-				".zshrc"
+				"target_dir" : "~",
+				"files" : [
+					".byobu",
+					".config",
+					".gitconfig",
+					".gitignore",
+					".gtkrc-2.0",
+					".gvimrc",
+					".vimrc",
+					".zshenv",
+					".zshrc"
 				]
 			},
 			{
-				"~/.oh-my-zsh/themes" : [
+				"target_dir" : "~/.oh-my-zsh/themes",
+				"files" : [
 					"my-fino.zsh-theme"
 				]	
 			}

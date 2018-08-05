@@ -4,7 +4,7 @@ import json
 import argparse
 from subprocess import Popen, check_output
 from sys import exit
-from os import chdir, path, error, listdir
+from os import chdir, path, error, listdir, makedirs
 from shutil import copy2
 
 class Logger:
@@ -289,7 +289,7 @@ def configure_git_repo(repo):
 Copies any user config files from the configuration directory to the specified location
 '''
 def install_config_files(config):
-    if len(config["config_files"]) > 0:
+    if len(config["config_files"]["targets"]) > 0:
         Logger.info("Copying configuration files...")
         config_file_dir = config["config_files"]["config_file_dir"]
         if path.isdir(config_file_dir):
@@ -298,10 +298,12 @@ def install_config_files(config):
             Logger.failure("config_files directory does not exist")
             exit(10)
         for target in config["config_files"]["targets"]:
-            for file in config["config_files"][target]:
+            if not path.exists(target["target_dir"]):
+                makedirs(target["target_dir"])
+            for file in target["files"]:
                 if path.isfile(path.join(config_file_dir, file)):
                     try:
-                        copy2(file, target)
+                        copy2(file, target["target_dir"])
                     except (IOError, error) as why:
                         Logger.failure("Failed to copy %s to %s: %s" % (file, target, str(why)))
                         exit(11)
