@@ -350,8 +350,8 @@ def make_config_json():
             repo["directory"] = directory
             repo["url"] = check_output('git remote get-url origin', shell = True).strip()
             repos.append(repo)
-    repos = repos.sort(key=lambda x: x.directory)
-    config["git"]["repos"] = repos
+    sorted_repos = sorted(repos, key=lambda x: x["directory"])
+    config["git"]["repos"] = sorted_repos
     config["config_files"] = {
         "config_file_dir" : "/opt/configfiles",
         "targets" : [
