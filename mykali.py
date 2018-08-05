@@ -333,7 +333,7 @@ def make_config_json():
         "is_vmware" : False
     }
     config["packages"] = check_output("apt-mark showmanual", shell = True).strip().split("\n")
-    config["pip_installs"] = check_output('pip list | cut -d" " -f 1', shell = True).strip().split("\n")
+    config["pip_installs"] = check_output('pip list | cut -d" " -f 1 | egrep -v "^Package|--------"', shell = True).strip().split("\n")
     config["cmds"] = []
     config['git'] = {}
     config['git']['install_dir'] = git_directories_location
@@ -350,6 +350,7 @@ def make_config_json():
             repo["directory"] = directory
             repo["url"] = check_output('git remote get-url origin', shell = True).strip()
             repos.append(repo)
+    repos = repos.sort(key=lambda x: x.directory)
     config["git"]["repos"] = repos
     config["config_files"] = {
         "config_file_dir" : "/opt/configfiles",
