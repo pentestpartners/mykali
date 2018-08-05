@@ -4,7 +4,7 @@ import json
 import argparse
 from subprocess import Popen, check_output
 from sys import exit
-from os import chdir, path
+from os import chdir, path, error, listdir
 from shutil import copy2
 
 class Logger:
@@ -87,7 +87,7 @@ def install_requirements(config):
     if process.returncode == 0:
         Logger.success("Done!")
     else:
-        Logger.failure("Failed to install: %s" % package)
+        Logger.failure("Failed to install: %s" % package_list)
         exit(2)
     Logger.info("Adding Git SSH keys to known hosts...")
     for site in config["git"]["ssh_keyscans"]:
@@ -111,7 +111,7 @@ def handle_vm(config):
             process = Popen("mount /dev/cdrom /mnt && mkdir /tmp/vmware && cp /mnt/* /tmp/vmware && cd /tmp/vmware && gunzip VMwareTools-* && tar -xvf VMwareTools-* && ./vmware-tools-distrib/vmware-install.pl", shell = True)
             process.wait()
             if process.returncode == 0:
-                Logger.succes("Done!")
+                Logger.success("Done!")
         else:
             Logger.failure("Failed.")
             exit(12)
@@ -302,11 +302,44 @@ def install_config_files(config):
                 if path.isfile(path.join(config_file_dir, file)):
                     try:
                         copy2(file, target)
-                    except (IOError, os.error) as why:
+                    except (IOError, error) as why:
                         Logger.failure("Failed to copy %s to %s: %s" % (file, target, str(why)))
                         exit(11)
                 else:
                     Logger.failure("Target config file doesn't exist in the config_files directory: %s" % file)
+
+'''
+Creates a new config.json file based on the current system. 
+'''
+def make_config_json():
+    Logger.info("Creating new config.json file")
+    new_config_file_location = raw_input("What directory should the new config.json be generated in? ")
+    if not path.isdir(new_config_file_location):
+        Logger.failure("That isn't an existing directory")
+        exit(12)
+    git_directories_location = raw_input("Where are your git repositories cloned to? ")
+    if not path.isdir(git_directories_location):
+        Logger.failure("That isn't an existing directory")
+        exit(13)
+    config = {}
+    config['git'] = {}
+    config['git']['install_dir'] = git_directories_location
+    config['git']['ssh_keyscans'] = [
+        "bitbucket.org", "github.com"
+    ]
+    subdir_list = [f for f in listdir(git_directories_location) if path.isdir(path.join(git_directories_location, f))]
+    repos = []
+    for directory in subdir_list:
+        full_path = path.join(git_directories_location, directory)
+        chdir(full_path)
+        if path.isdir(path.join('.', '.git')):
+            repo = {}
+            repo["directory"] = directory
+            repo["url"] = check_output('git remote get-url origin', shell = True).strip()
+            repos.append(repo)
+    config["git"]["repos"] = repos
+    print config
+    
 
 '''
 Create an arg parser for handling the program arguments.
@@ -314,9 +347,10 @@ Create an arg parser for handling the program arguments.
 def create_arg_parser():
     parser = argparse.ArgumentParser(description = 'A Kali Linux configuration tool')
     exclusive = parser.add_mutually_exclusive_group()
-    exclusive.add_argument("-r", "--run", help = "run the setup with the current configuration", action="store_true")
-    exclusive.add_argument("-u", "--update", help = "just update existing configuration. Updates Kali, pip installs and Git repositories/installations. The update command assumes the run command has been completed successfully at least once.", action="store_true")
-    exclusive.add_argument("-c", "--config", help = "display the current configuration file", action="store_true")
+    exclusive.add_argument("-r", "--run", help = "run the setup with the current configuration", action = "store_true")
+    exclusive.add_argument("-u", "--update", help = "just update existing configuration. Updates Kali, pip installs and Git repositories/installations. The update command assumes the run command has been completed successfully at least once.", action = "store_true")
+    exclusive.add_argument("-c", "--config", help = "display the current configuration file", action = "store_true")
+    exclusive.add_argument("-m", "--make", help = "makes a new config.json file based off the current system", action = "store_true")
     parser.add_argument("-d", "--directory", help = "specify the directory containing the config.json file and config_files directory.")
     return parser
 
@@ -337,6 +371,10 @@ def main():
 
     if args.config:
         print open(path.join(directory, 'config.json'), 'r').read()
+        exit(0)
+    
+    if args.make:
+        make_config_json()
         exit(0)
 
     if args.run:
