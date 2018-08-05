@@ -420,25 +420,27 @@
 			}
 		]
 	},
-		"config_files" : [
+	"config_files" : {
+		"config_file_dir" : "/opt/configfiles",
+		"targets": [
 			{
-				"config_file_dir" : "/opt/configfiles",
-				"targets": {
-					"~" : [
-						".byobu",
-						".config",
-						".gitconfig",
-						".gitignore",
-						".gtkrc-2.0",
-						".gvimrc",
-						".vimrc",
-						".zshenv",
-						".zshrc"
-					],
-					"~/.oh-my-zsh/themes" : [
-						"my-fino.zsh-theme"
-					]	
-				}
+				"~" : [
+				".byobu",
+				".config",
+				".gitconfig",
+				".gitignore",
+				".gtkrc-2.0",
+				".gvimrc",
+				".vimrc",
+				".zshenv",
+				".zshrc"
+				]
+			},
+			{
+				"~/.oh-my-zsh/themes" : [
+					"my-fino.zsh-theme"
+				]	
 			}
-	]
+		]
+	}
 }

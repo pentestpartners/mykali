@@ -19,6 +19,7 @@ So far it has the capability to:
 - Clone a user configured set of Git repositories to a folder (such as */opt*).
 - Run install commands on those repositories (such as `pip install`, `./install.sh` etc.).
 - Copy saved configuration files to a specified location (such as **.bashrc** files etc.).
+- Create a **config.json** starter file based on the current system, automatically adding git repositories, installed packages etc.
 
 *The tool can also be used to update Kali along with all the pip/Git tools.*
 
@@ -48,7 +49,7 @@ The **config.json** is broken down into multiple sections **which are applied in
 To get help run the script without args or with the `-h` or `--help` option:
 ```
 # ./mykali.py
-usage: mykali.py [-h] [-r | -u | -c] [-d DIRECTORY]
+usage: mykali.py [-h] [-r | -u | -c | -m] [-d DIRECTORY]
 
 A Kali Linux configuration tool
 
@@ -60,8 +61,11 @@ optional arguments:
                         update command assumes the run command has been
                         completed successfully at least once.
   -c, --config          display the current configuration file
+  -m, --make            makes a new config.json file based off the current
+                        system
   -d DIRECTORY, --directory DIRECTORY
-                        specify the directory containing the config.json.
+                        specify the directory containing the config.json file
+                        and config_files directory.
 
 ```
 
@@ -122,22 +126,24 @@ To view the current config, run the script with `-c` or `--config`:
 			}
 		]
 	},
-		"config_files" : [
+	"config_files" : {
+		"config_file_dir" : "/opt/configfiles",
+		"targets": [
 			{
-				"config_file_dir" : "/opt/configfiles",
-				"targets": {
-					"~" : [
-						".byobu",
-						".vimrc",
-						".zshenv",
-						".zshrc"
-					],
-					"~/.oh-my-zsh/themes" : [
-						"my-fino.zsh-theme"
-					]	
-				}
+				"~" : [
+				".gitconfig",
+				".gitignore",
+				".vimrc",
+				".zshrc"
+				]
+			},
+			{
+				"~/.oh-my-zsh/themes" : [
+					"my-theme.zsh-theme"
+				]	
 			}
 		]
+	}
 }
 
 ```
@@ -159,6 +165,13 @@ To just have the script update Kali plus the installed pip tools and Git reposit
 ./mykali.py --update --directory ~/Downloads/config
 ```
 
+To create a template **config.json** based on the current system, use the `-m` or `--make` option:
+
+```
+./mykali.py --make
+```
+This will ask the user a few questions and then generate a the file with the git repositories, packages and so on installed on the current system added to the file. The result it not a finished file however, and should be manually checked! For example, install commands for git repositories are not added, and will have to be added manually.
+
 ## Roadmap
 
 - [x] Have the script check the */etc/apt/sources.list* is up to date (in case install from CD)
@@ -176,7 +189,7 @@ To just have the script update Kali plus the installed pip tools and Git reposit
 - [x] Another tool for mass updating git repositories 
 - [x] Have Git check for updates before pulling and rebuilding
 - [ ] Have the script handle environment variables for paths etc.
-- [ ] Create a secondary tool for looping through an existing /opt directory (or wherever) and adding the repos to the config.json
+- [x] Create a secondary tool for looping through an existing /opt directory (or wherever) and adding the repos to the config.json
 - [ ] Set the resolution (Currently possible via a command.)
 - [ ] Install a background/wallpaper (very important!) (Currently possible via a command.)
 - [ ] Look into a host script for VMs which will configure the VM appropriately (bridged/NAT'd etc)

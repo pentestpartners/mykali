@@ -309,7 +309,7 @@ def install_config_files(config):
                     Logger.failure("Target config file doesn't exist in the config_files directory: %s" % file)
 
 '''
-Creates a new config.json file based on the current system. 
+Creates a new config.json file based on the current system as s starting point. 
 '''
 def make_config_json():
     Logger.info("Creating new config.json file")
@@ -322,6 +322,17 @@ def make_config_json():
         Logger.failure("That isn't an existing directory")
         exit(13)
     config = {}
+    config["kali-sources"] = {
+        "sources-file" : '/etc/apt/sources.list',
+        "repo" : "deb http://http.kali.org/kali kali-rolling main contrib non-free"
+    }
+    config["requirements"] = [ "git" ]
+    config["vm"] = {
+        "is_vmware" : False
+    }
+    config["packages"] = check_output("apt-mark showmanual", shell = True).strip().split("\n")
+    config["pip_installs"] = check_output('pip list | cut -d" " -f 1', shell = True).strip().split("\n")
+    config["cmds"] = []
     config['git'] = {}
     config['git']['install_dir'] = git_directories_location
     config['git']['ssh_keyscans'] = [
@@ -338,7 +349,19 @@ def make_config_json():
             repo["url"] = check_output('git remote get-url origin', shell = True).strip()
             repos.append(repo)
     config["git"]["repos"] = repos
-    print config
+    config["config_files"] = {
+        "config_file_dir" : "/opt/configfiles",
+        "targets" : [
+            { 
+                "~" : [
+
+                ]
+            }
+        ]
+    }
+    output_location = path.join(new_config_file_location, 'config.json')
+    with open(output_location, "w") as write_file:
+        json.dump(config, write_file, indent=4, separators=(',', ' : '))
     
 
 '''
