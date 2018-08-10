@@ -104,7 +104,7 @@
 				"directory" : "ADRecon",
 				"url" : "https://github.com/sense-of-security/ADRecon.git"
 			},
-						{
+			{
 				"directory" : "aquatone",
 				"url" : "https://github.com/michenriksen/aquatone.git",
 				"install_cmds" : [
@@ -127,6 +127,13 @@
 				"directory" : "bettercap-caplets",
 				"url" : "https://github.com/bettercap/caplets.git"
 			},
+			{
+                "directory" : "crackmapexec",
+				"url" : "https://github.com/byt3bl33d3r/CrackMapExec.git",
+				"install_cmds" : [
+					"python setup.py install"
+				]
+            },
 			{
 				"directory" : "cupp",
 				"url" : "https://github.com/Mebus/cupp.git"
@@ -153,6 +160,10 @@
 					"apt-get install -y tesseract-ocr python3-imaging"
 				]
 			},
+			{
+                "directory" : "DomainPasswordSpray",
+                "url" : "https://github.com/dafthack/DomainPasswordSpray.git"
+            },
 			{
 				"directory" : "ducky",
 				"url" : "https://github.com/hak5darren/USB-Rubber-Ducky.git"
@@ -183,6 +194,10 @@
 				]
 			},
 			{
+                "directory" : "fimap",
+                "url" : "https://github.com/kurobeats/fimap.git"
+            },
+			{
 				"directory" : "fluxion",
 				"url" : "--recursive https://github.com/FluxionNetwork/fluxion.git"
 			},
@@ -190,6 +205,10 @@
 				"directory" : "Get-LAPSPasswords",
 				"url" : "https://github.com/kfosaaen/Get-LAPSPasswords.git"
 			},
+			{
+                "directory" : "gpppfinder",
+                "url" : "https://bitbucket.org/grimhacker/gpppfinder.git"
+            },
 			{
 				"directory" : "GPRegistryPolicy",
 				"url" : "https://github.com/PowerShell/GPRegistryPolicy.git"
@@ -264,7 +283,7 @@
 				"url" : "https://github.com/sleventyeleven/linuxprivchecker.git"
 			},
 			{
-				"directory" : "mailsniper",
+				"directory" : "MailSniper",
 				"url" : "https://github.com/dafthack/MailSniper.git"
 			},
 			{
@@ -390,11 +409,22 @@
 			},
 			{
 				"directory" : "sniper",
-				"url" : "https://github.com/1N3/Sn1per.git",
+				"url" : "https://github.com/m0rv4i/Sn1per.git",
 				"install_cmds" : [
 					"./install.sh"
 				]
 			},
+			{
+                "directory" : "Sublist3r",
+				"url" : "https://github.com/aboul3la/Sublist3r.git",
+				"install_cmds" : [
+					"pip install -r requirements.txt"
+				]
+			},
+			{
+                "directory" : "sqlmap",
+                "url" : "--depth 1 https://github.com/sqlmapproject/sqlmap.git"
+            },
 			{
 				"directory" : "unicorn",
 				"url" : "https://github.com/trustedsec/unicorn.git"

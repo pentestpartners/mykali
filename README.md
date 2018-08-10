@@ -69,10 +69,18 @@ optional arguments:
 
 ```
 
+If you don't want to run it from the repository directory every time, you can create a shortcut your path.
+E.g.:
+```
+echo "#\!/bin/bash\npython2 /opt/mykali/mykali.py \$*" > /usr/local/bin/mykali; chmod +x /usr/local/bin/mykali
+```
+Then just run `mykali`.
+
+
 To view the current config, run the script with `-c` or `--config`:
 
 ```
-# ./mykali.py --config
+# mykali --config
 {
 	"kali-sources" : {
 		"sources-file" : "/etc/apt/sources.list",
@@ -151,25 +159,25 @@ To view the current config, run the script with `-c` or `--config`:
 
 To run the script with the current configuration in the script's directory use the `-r` or `--run` option:
 ```
-./mykali.py --run
+mykali --run
 ```
 
 To run the script and specify the directory holding the *config.json* use the `-d` or `--directory` option:
 
 ```
-./mykali.py --run --directory ~/Downloads/config
+mykali --run --directory ~/Downloads/config
 ```
 
 To just have the script update Kali plus the installed pip tools and Git repositories, use the `-u` or `--update` option:
 
 ```
-./mykali.py --update --directory ~/Downloads/config
+mykali --update --directory ~/Downloads/config
 ```
 
 To create a template **config.json** based on the current system, use the `-m` or `--make` option:
 
 ```
-./mykali.py --make
+mykali --make
 ```
 This will ask the user a few questions and then generate a the file with the git repositories, packages and so on installed on the current system added to the file. The result it not a finished file however, and should be manually checked! For example, install commands for git repositories are not added, and will have to be added manually.
 
