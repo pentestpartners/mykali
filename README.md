@@ -70,9 +70,10 @@ optional arguments:
 ```
 
 If you don't want to run it from the repository directory every time, you can create a shortcut your path.
-E.g.:
+E.g. create this file with execute permissions: **/usr/local/bin/mykali**
 ```
-echo "#\!/bin/bash\npython2 /opt/mykali/mykali.py \$*" > /usr/local/bin/mykali; chmod +x /usr/local/bin/mykali
+#!/bin/bash
+python2 /opt/mykali/mykali.py $*
 ```
 Then just run `mykali`.
 

@@ -90,6 +90,8 @@ def install_requirements(config):
         Logger.failure("Failed to install: %s" % package_list)
         exit(2)
     Logger.info("Adding Git SSH keys to known hosts...")
+    if not path.isdir("~/.ssh"):
+        makedirs("~/.ssh")
     for site in config["git"]["ssh_keyscans"]:
         process = Popen("ssh-keyscan %s >> ~/.ssh/known_hosts" % site, shell = True)
         process.wait()
