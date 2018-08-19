@@ -46,7 +46,7 @@ Check that the Kali linux sources have been set in /etc/apt/sources.list (as whe
 '''
 def check_kali_sources(config):
     Logger.info("Checking sources file...")
-    sources_file_path = config["kali-sources"]["sources-file"]
+    sources_file_path = path.expanduser(onfig["kali-sources"]["sources-file"])
     if not path.isfile(sources_file_path):
         Logger.failure("Failed.")
         Logger.failure("Configured sources file does not exist, please check the config and try again.")
@@ -68,7 +68,7 @@ Update the Kali distribution using apt-get.
 '''
 def update_kali(config):
 	Logger.info("Updating Kali")
-        process = Popen("apt-get update && apt-get full-upgrade -y", shell = True)
+        process = Popen("apt-get update && apt-get full-upgrade -y && apt autoremove", shell = True)
         process.wait()
         if process.returncode == 0:
             Logger.success("Done!")
@@ -90,8 +90,9 @@ def install_requirements(config):
         Logger.failure("Failed to install: %s" % package_list)
         exit(2)
     Logger.info("Adding Git SSH keys to known hosts...")
-    if not path.isdir("~/.ssh"):
-        makedirs("~/.ssh")
+    ssh_dir = path.expanduser('~/.ssh')
+    if not path.isdir(ssh_dir):
+        makedirs(ssh_dir)
     for site in config["git"]["ssh_keyscans"]:
         process = Popen("ssh-keyscan %s >> ~/.ssh/known_hosts" % site, shell = True)
         process.wait()
@@ -155,12 +156,13 @@ def run_user_commands(config):
     if len(config["cmds"]) > 0:
         Logger.info("Running user defined commands...")
         for cmd in config["cmds"]:
-            process = Popen(cmd, shell = True)
+            expanded_cmd = path.expandvars(cmd)
+            process = Popen(expanded_cmd, shell = True)
             process.wait()
             if process.returncode == 0:
-                Logger.success("Executed: %s%s%s" % (Logger.BLUE, cmd, Logger.ENDC))
+                Logger.success("Executed: %s%s%s" % (Logger.BLUE, expanded_cmd, Logger.ENDC))
             else:
-                Logger.failure("Command Failed: '%s'" % cmd)
+                Logger.failure("Command Failed: '%s'" % expanded_cmd)
                 exit(6)
 
 '''
@@ -170,7 +172,7 @@ def install_git_repos(config):
     if "repos" in config["git"] and len(config["git"]["repos"]) > 0:
         errored = False
         Logger.info("Cloning and configuring git repositories...")
-        install_dir = config["git"]["install_dir"]
+        install_dir = path.expanduser(config["git"]["install_dir"])
         if not path.isdir(install_dir):
             Logger.failure("Git install directory does not exist: %s" % install_dir)
             Logger.failure("Please check the configuration and try again.")
@@ -178,7 +180,7 @@ def install_git_repos(config):
         for repo in config["git"]["repos"]:
             chdir(install_dir)
             url = repo["url"]
-            directory = repo["directory"]
+            directory = path.expanduser(repo["directory"])
             Logger.info("Cloning: %s into %s%s%s" % (url, Logger.BLUE, directory, Logger.ENDC))
 
             if path.isdir(directory):
@@ -209,13 +211,13 @@ def update_git_repos(config):
     if "repos" in config["git"] and len(config["git"]["repos"]) > 0:
         errored = False
         Logger.info("Updating git repositories...")
-        install_dir = config["git"]["install_dir"]
+        install_dir = path.expanduser(config["git"]["install_dir"])
         if not path.isdir(install_dir):
             Logger.failure("Git install directory does not exist: %s" % install_dir)
             Logger.failure("Please check the configuration and try again.")
             exit(7)
         for repo in config["git"]["repos"]:
-            directory = repo["directory"]
+            directory = path.expanduser(repo["directory"])
             repo_dir = path.join(install_dir, directory)
             if not path.isdir(repo_dir):
                 url = repo["url"]
@@ -276,7 +278,7 @@ Configure/install the git repos if require - e.g. run pip install or setup scrip
 def configure_git_repo(repo):
     if "install_cmds" in repo and len(repo["install_cmds"]) > 0:
         Logger.info("Running repo setup scripts...")
-        chdir(repo["directory"])
+        chdir(path.expanduser(repo["directory"]))
         for cmd in repo["install_cmds"]:
             process = Popen(cmd, shell = True)
             process.wait()
@@ -293,21 +295,22 @@ Copies any user config files from the configuration directory to the specified l
 def install_config_files(config):
     if len(config["config_files"]["targets"]) > 0:
         Logger.info("Copying configuration files...")
-        config_file_dir = config["config_files"]["config_file_dir"]
+        config_file_dir = path.expanduser(config["config_files"]["config_file_dir"])
         if path.isdir(config_file_dir):
             path.chdir(config_file_dir)
         else:
             Logger.failure("config_files directory does not exist")
             exit(10)
         for target in config["config_files"]["targets"]:
-            if not path.exists(target["target_dir"]):
-                makedirs(target["target_dir"])
+            expanded_target_dir = path.expanduser(target["target_dir"])
+            if not path.exists(expanded_target_dir):
+                makedirs(expanded_target_dir)
             for file in target["files"]:
                 if path.isfile(path.join(config_file_dir, file)):
                     try:
-                        copy2(file, target["target_dir"])
+                        copy2(file, expanded_target_dir)
                     except (IOError, error) as why:
-                        Logger.failure("Failed to copy %s to %s: %s" % (file, target, str(why)))
+                        Logger.failure("Failed to copy %s to %s: %s" % (file, expanded_target_dir, str(why)))
                         exit(11)
                 else:
                     Logger.failure("Target config file doesn't exist in the config_files directory: %s" % file)
@@ -317,11 +320,11 @@ Creates a new config.json file based on the current system as s starting point.
 '''
 def make_config_json():
     Logger.info("Creating new config.json file")
-    new_config_file_location = raw_input("What directory should the new config.json be generated in? ")
+    new_config_file_location = path.expanduser(raw_input("What directory should the new config.json be generated in? "))
     if not path.isdir(new_config_file_location):
         Logger.failure("That isn't an existing directory")
         exit(12)
-    git_directories_location = raw_input("Where are your git repositories cloned to? ")
+    git_directories_location = path.expanduser(raw_input("Where are your git repositories cloned to? "))
     if not path.isdir(git_directories_location):
         Logger.failure("That isn't an existing directory")
         exit(13)
@@ -392,7 +395,7 @@ def main():
     directory = path.dirname(path.realpath(__file__)) 
 
     if args.directory is not None:
-        directory = args.directory
+        directory = path.expanduser(args.directory)
         if not path.isdir(directory):
             Logger.failure("%s does not exist, please check and try again." % directory)
             exit(9)
