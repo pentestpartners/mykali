@@ -46,7 +46,7 @@ Check that the Kali linux sources have been set in /etc/apt/sources.list (as whe
 '''
 def check_kali_sources(config):
     Logger.info("Checking sources file...")
-    sources_file_path = path.expanduser(onfig["kali-sources"]["sources-file"])
+    sources_file_path = path.expanduser(config["kali-sources"]["sources-file"])
     if not path.isfile(sources_file_path):
         Logger.failure("Failed.")
         Logger.failure("Configured sources file does not exist, please check the config and try again.")
