@@ -297,7 +297,7 @@ def install_config_files(config):
         Logger.info("Copying configuration files...")
         config_file_dir = path.expanduser(config["config_files"]["config_file_dir"])
         if path.isdir(config_file_dir):
-            path.chdir(config_file_dir)
+            os.chdir(config_file_dir)
         else:
             Logger.failure("config_files directory does not exist")
             exit(10)
