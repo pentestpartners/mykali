@@ -31,7 +31,7 @@ An example **config.json** is provided, in addition to a barebones copy at **bar
 
 ## Configuration
 
-The idea here is you have a google drive/dropbox/git/whatever repository with your dotfiles etc. and a **config.json**. On a fresh build you can then grab that repository, clnoe this tool and then run it, pointing at that directory and it will configure the Kali box accordingly. 
+The idea here is you have a google drive/dropbox/git/whatever repository with your dotfiles etc. and a **config.json**. On a fresh build you can then grab that repository, clone this tool and then run it, pointing at that directory and it will configure the Kali box accordingly. 
 
 The **config.json** is broken down into multiple sections **which are applied in the following order**:
 
